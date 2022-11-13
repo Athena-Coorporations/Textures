@@ -1,67 +1,50 @@
-# install pygame before running the file
 import pygame
-import sys
+import os
+import pkg_resources
+from textures import *
+from maps import *
+
+pList = sorted(["%s==%s" % (i.key, i.version) for i in pkg_resources.working_set])
+if 'pygame==2.1.2' not in pList:
+	os.system('pip install pygame')
 
 pygame.init()
-
-map = [
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-	[4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-	[4, 1, 1, 1, 1, 4, 4, 4, 1, 1, 1, 1, 1, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 4],
-	[4, 4, 1, 1, 4, 4, 4, 4, 4, 4, 1, 1, 1, 4, 4, 4, 4, 4, 4, 1, 1, 1, 1, 4, 4],
-	[4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 1, 1, 4, 4, 4, 4, 4, 4, 4, 1, 1, 4, 4, 4, 4],
-	[4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4],
-	[4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-	[5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 1, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-	[5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-	[5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-	[5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-	[5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-	[5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-	[5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-	[5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-	[5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-]
-# line 30
-sc_width, sc_height = 800, 640
+sc_width, sc_height = 832, 672
+row, coulumn = int(sc_width / 32), int(sc_height / 32)
 sc = pygame.display.set_mode((sc_width, sc_height))
-pygame.display.set_caption("Texture Renderer Test")
+pygame.display.set_caption("Texture Renderer Test [ESC or Quit Button to Quit]")
 
-#<name>        <=>               <declaration>								 <tag>
-grass 			= pygame.image.load("backgrounds/grass.png")				# 000
-dirt 			= pygame.image.load("backgrounds/dirt.png")					# 001
-snow 			= pygame.image.load("backgrounds/snow.png")					# 002
-water 			= pygame.image.load("backgrounds/water.png")				# 003
-cobble 			= pygame.image.load("backgrounds/cobblestone.png")			# 004
-st_brick 		= pygame.image.load("backgrounds/stone_brick.png")			# 005
-
-def sc_blit():
-	sc.fill((255, 0, 0))
-	for i in range(20):
-		for j in range(25):
+def render_test_map():
+	for i in range(coulumn):
+		for j in range(row):
 			pos = (j*32, i*32)
 
-			if(map[i][j] == 0):
+			if(test_map[i][j] == 0):
 				sc.blit(grass, pos)
 
-			elif(map[i][j] == 1):
+			elif(test_map[i][j] == 1):
 				sc.blit(dirt, pos)
 
-			elif(map[i][j] == 2):
+			elif(test_map[i][j] == 2):
 				sc.blit(snow, pos)
 
-			elif(map[i][j] == 3):
+			elif(test_map[i][j] == 3):
 				sc.blit(water, pos)
 
-			elif(map[i][j] == 4):
+			elif(test_map[i][j] == 4):
 				sc.blit(cobble, pos)
 
-			elif(map[i][j] == 5):
-				sc.blit(st_brick, pos)
+			elif(test_map[i][j] == 5):
+				sc.blit(stone_brick, pos)
+
+			elif(test_map[i][j] == 6):
+				sc.blit(dead_grass, pos)
+
+			elif(test_map[i][j] == 7):
+				sc.blit(plank, pos)
+
+			elif(test_map[i][j] == 8):
+				sc.blit(brick, pos)
 
 	pygame.display.update()
 
@@ -70,14 +53,14 @@ def main():
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				pygame.quit()
-				sys.exit()
+				os._exit(0)
 
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_ESCAPE:
 					pygame.quit()
-					sys.exit()
+					os._exit(0)
 
-		sc_blit()
+		render_test_map()
 
 if __name__ == '__main__':
 	main()
