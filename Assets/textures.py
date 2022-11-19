@@ -11,3 +11,5 @@ stone_brick 	= p.image.load("backgrounds/stone_brick.png")			        # 005
 dead_grass      = p.image.load("backgrounds/dead_grass.png")                    # 006
 plank           = p.image.load("backgrounds/plank.png")                         # 007
 brick           = p.image.load("backgrounds/brick.png")                         # 008
+cursor			= p.image.load("misc/cursor.png")								# 009
+b_cursor		= p.image.load("misc/cursor_noborder.png")						# 010
